@@ -161,19 +161,31 @@ app.controller('dashboardPCtrl', function($scope, $http, user){
             },
             data: 'professor_name='+username
         }).then(function(response){
-            console.log(response.data);
-            // if(response.data.status == 'registered'){
-            //     alert(response.data.message);
-            //     user.userLoggedIn();
-            //     user.setName(response.data.user);
-            //     if(roll=="Professor"){
-            //         $location.path('/dashboardP');
-            //     }else{
-            //         $location.path('/dashboardS');
-            //     }
-            // }else{
-            //     alert(response.data.message);
-            // }
+            if(response.data.status == 'courseFound'){
+            // console.log(response.data.session);
+            for(var i in response.data.session){
+                console.log(response.data.session[i]);
+                var newEle = angular.element(
+                "<div>"+
+                    response.data.session[i].id
+                    +response.data.session[i].university
+                    +response.data.session[i].course
+                    +response.data.session[i].professor
+                +"</div>");
+                var target = document.getElementById('myCourses');
+                angular.element(target).append(newEle);
+            }
+                // alert(response.data.message);
+                // user.userLoggedIn();
+                // user.setName(response.data.user);
+                // if(roll=="Professor"){
+                //     $location.path('/dashboardP');
+                // }else{
+                //     $location.path('/dashboardS');
+                // }
+            }else{
+                // alert(response.data.message);
+            }
         })
     };
     $scope.CreateCourse = function(){

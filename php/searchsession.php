@@ -2,10 +2,10 @@
     require "init2.php";
 
     $name = "SSS";
-    $search_input = $_POST["user_name"];
+    $search_input = $_POST["searchinput"];
 
     //$sql_query = "SELECT course from session WHERE course like '$search_input';";
-    $sql_query = "SELECT * from session WHERE REPLACE(professor, ' ', '') = REPLACE('$search_input', ' ', '');";
+    $sql_query = "SELECT * from session WHERE REPLACE(course, ' ', '') = REPLACE('$search_input', ' ', '');";
     $result = mysqli_query($con, $sql_query);
     $response = array();
 
