@@ -21,6 +21,10 @@ if(mysqli_num_rows($result) > 0){
     $response['user'] = $username;
     $response['useruniqueid'] = md5(uniqid());
     $_SESSION['useruniqueid'] = $response['useruniqueid'];
+    $row = mysqli_fetch_assoc($result);
+    $response['roll'] = $row["roll"];
+    // array_push($response, array("username"=>$row["username"], "passwd"=>$row["passwd"],"university"=>$row["university"], 
+    //         "roll"=>$row["roll"],"email"=>$row["email"], "studentNO"=>$row["studentNO"]));
 }else{
     $response['status'] = 'error';
 }

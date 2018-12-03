@@ -20,6 +20,26 @@ app.config(function($routeProvider){
         },
         templateUrl: './components/dashboard.html',
         controller: 'dashboardCtrl'
+    }).when('/dashboardP', {
+        resolve:{
+            check: function($location, user){
+                if(!user.isUserLoggedIn()){
+                    $location.path('/');
+                }
+            },
+        },
+        templateUrl: './components/dashboardP.html',
+        controller: 'dashboardCtrl'
+    }).when('/dashboardS', {
+        resolve:{
+            check: function($location, user){
+                if(!user.isUserLoggedIn()){
+                    $location.path('/');
+                }
+            },
+        },
+        templateUrl: './components/dashboardS.html',
+        controller: 'dashboardCtrl'
     })
     .otherwise({
         template: '404'
@@ -55,7 +75,11 @@ app.controller('loginCtrl', function($scope, $http, $location, user){
             if(response.data.status == 'loggedin'){
                 user.userLoggedIn();
                 user.setName(response.data.user);
-                $location.path('/dashboard');
+                if(response.data.roll=="Professor"){
+                    $location.path('/dashboardP');
+                }else{
+                    $location.path('/dashboardS');
+                }
             }else{
                 alert('invalid login');
             }
@@ -85,7 +109,11 @@ app.controller('registerCtrl', function($scope, $http, $location, user){
                 alert(response.data.message);
                 user.userLoggedIn();
                 user.setName(response.data.user);
-                $location.path('/dashboard');
+                if(roll=="Professor"){
+                    $location.path('/dashboardP');
+                }else{
+                    $location.path('/dashboardS');
+                }
             }else{
                 alert(response.data.message);
             }
