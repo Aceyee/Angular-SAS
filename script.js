@@ -29,7 +29,7 @@ app.config(function($routeProvider){
             },
         },
         templateUrl: './components/dashboardP.html',
-        controller: 'dashboardCtrl'
+        controller: 'dashboardPCtrl'
     }).when('/dashboardS', {
         resolve:{
             check: function($location, user){
@@ -39,7 +39,7 @@ app.config(function($routeProvider){
             },
         },
         templateUrl: './components/dashboardS.html',
-        controller: 'dashboardCtrl'
+        controller: 'dashboardSCtrl'
     })
     .otherwise({
         template: '404'
@@ -147,5 +147,50 @@ app.service('user', function(){
 })
 
 app.controller('dashboardCtrl', function($scope, user){
+    $scope.user = user.getName();
+});
+app.controller('dashboardPCtrl', function($scope, $http, user){
+    $scope.user = user.getName();
+    $scope.listMyCourse = function(){
+        var username = user.getName();
+        $http({
+            url: 'http://localhost:90/php/listSession.php',
+            method: 'POST',
+            headers:{
+                'Content-Type':'application/x-www-form-urlencoded'
+            },
+            data: 'professor_name='+username
+        }).then(function(response){
+            console.log(response.data);
+            // if(response.data.status == 'registered'){
+            //     alert(response.data.message);
+            //     user.userLoggedIn();
+            //     user.setName(response.data.user);
+            //     if(roll=="Professor"){
+            //         $location.path('/dashboardP');
+            //     }else{
+            //         $location.path('/dashboardS');
+            //     }
+            // }else{
+            //     alert(response.data.message);
+            // }
+        })
+    };
+    $scope.CreateCourse = function(){
+        var username = user.getName();
+        var courseNo = $scope.courseNo;
+        $http({
+            url: 'http://localhost:90/php/createSession.php',
+            method: 'POST',
+            headers:{
+                'Content-Type':'application/x-www-form-urlencoded'
+            },
+            data: 'professor='+username+'&course='+courseNo+'&university=UVic'
+        }).then(function(response){
+            console.log(response.data);
+        })
+    }
+});
+app.controller('dashboardSCtrl', function($scope, user){
     $scope.user = user.getName();
 });

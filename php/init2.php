@@ -1,7 +1,7 @@
 <?php
     header('Access-Control-Allow-Origin: *');
     $mysql_user="aceyee";
-    $db_name="yzh_user_login";
+    $db_name="yzh_session";
     $mysql_pass="Yzh1028#";
     $server_name="localhost";
 
@@ -9,6 +9,6 @@
     if(!$con){
         echo "connection error ".mysqli_connect_error();
     }else{
-        // echo "<h3>Database connection Success<\h3>";
+        //echo "<h3>Database connection Success<\h3>";
     }
 ?>
