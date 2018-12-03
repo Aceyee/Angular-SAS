@@ -172,6 +172,7 @@ app.controller('dashboardPCtrl', function($scope, $http, user){
                     +"</button>";
                     target.appendChild(div);
                     div.addEventListener("click", function(){ 
+                        // alert(response.data.session[i].id);
                         $http({
                             url: 'http://localhost:90/php/display.php',
                             method: 'POST',
@@ -208,6 +209,53 @@ app.controller('dashboardPCtrl', function($scope, $http, user){
         })
     }
 });
-app.controller('dashboardSCtrl', function($scope, user){
+app.controller('dashboardSCtrl', function($scope, $http, user){
     $scope.user = user.getName();
+
+    $scope.searchCourse = function(){
+        var course = $scope.courseNo;
+        $http({
+            url: 'http://localhost:90/php/searchSession.php',
+            method: 'POST',
+            headers:{
+                'Content-Type':'application/x-www-form-urlencoded'
+            },
+            data: 'searchinput='+course
+        }).then(function(response){
+            if(response.data.status == 'courseFound'){
+                var target = document.getElementById('myCourses');
+                for(var i in response.data.session){
+                    var div = document.createElement("div");
+                    div.innerHTML = "<button>"+
+                    response.data.session[i].university+" "
+                    +response.data.session[i].course+" "
+                    +response.data.session[i].professor+" "
+                    +"</button>";
+                    target.appendChild(div);
+                    div.addEventListener("click", function(){ 
+                        $http({
+                            url: 'http://localhost:90/php/punch.php',
+                            method: 'POST',
+                            headers:{
+                                'Content-Type':'application/x-www-form-urlencoded'
+                            },
+                            data: 'courseid='+response.data.session[i].id+'&choice=A&university='+
+                                response.data.session[i].university
+                        }).then(function(response){
+                            // console.log(response.data);
+                            if(response.data.status == 'success'){
+                                // alert(response.data.num+" people signed up");
+                                alert("signed up!");
+                            }else{
+                                alert('error');
+                            }
+                        });
+                    });
+                }
+            }else{
+                alert(response.data.message);
+                // console.log(response.data);
+            }
+        })
+    };
 });
