@@ -14,7 +14,7 @@ app.config(function($routeProvider){
         resolve:{
             check: function($location, user){
                 if(!user.isUserLoggedIn()){
-                    $location.path('/login');
+                    $location.path('/');
                 }
             },
         },
@@ -45,14 +45,13 @@ app.controller('loginCtrl', function($scope, $http, $location, user){
         var password = $scope.password;
 
         $http({
-            url: 'http://localhost:90/server.php',
+            url: 'http://localhost:90/php/server.php',
             method: 'POST',
             headers:{
                 'Content-Type':'application/x-www-form-urlencoded'
             },
             data: 'username='+username+'&password='+password
         }).then(function(response){
-            console.log(response.data);
             if(response.data.status == 'loggedin'){
                 user.userLoggedIn();
                 user.setName(response.data.user);
@@ -70,11 +69,10 @@ app.controller('registerCtrl', function($scope, $http, $location, user){
         var password = $scope.password;
         var university = $scope.university;
         var roll = $scope.roll;
-        // console.log(roll);
         var email = $scope.email;
 
         $http({
-            url: 'http://localhost:90/register.php',
+            url: 'http://localhost:90/php/register.php',
             method: 'POST',
             headers:{
                 'Content-Type':'application/x-www-form-urlencoded'
@@ -83,13 +81,14 @@ app.controller('registerCtrl', function($scope, $http, $location, user){
                     +'&user_roll='+roll +'&user_email='+email
         }).then(function(response){
             console.log(response.data);
-            // if(response.data.status == 'loggedin'){
-            //     user.userLoggedIn();
-            //     user.setName(response.data.user);
-            //     $location.path('/dashboard');
-            // }else{
-            //     alert('invalid login');
-            // }
+            if(response.data.status == 'registered'){
+                alert(response.data.message);
+                user.userLoggedIn();
+                user.setName(response.data.user);
+                $location.path('/dashboard');
+            }else{
+                alert(response.data.message);
+            }
         })
     }
 });
