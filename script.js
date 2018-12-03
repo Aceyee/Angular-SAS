@@ -162,29 +162,34 @@ app.controller('dashboardPCtrl', function($scope, $http, user){
             data: 'professor_name='+username
         }).then(function(response){
             if(response.data.status == 'courseFound'){
-            // console.log(response.data.session);
-            for(var i in response.data.session){
-                console.log(response.data.session[i]);
-                var newEle = angular.element(
-                "<div>"+
-                    response.data.session[i].id
-                    +response.data.session[i].university
-                    +response.data.session[i].course
-                    +response.data.session[i].professor
-                +"</div>");
                 var target = document.getElementById('myCourses');
-                angular.element(target).append(newEle);
-            }
-                // alert(response.data.message);
-                // user.userLoggedIn();
-                // user.setName(response.data.user);
-                // if(roll=="Professor"){
-                //     $location.path('/dashboardP');
-                // }else{
-                //     $location.path('/dashboardS');
-                // }
+                for(var i in response.data.session){
+                    var div = document.createElement("div");
+                    div.innerHTML = "<button>"+
+                    response.data.session[i].university+" "
+                    +response.data.session[i].course+" "
+                    +response.data.session[i].professor+" "
+                    +"</button>";
+                    target.appendChild(div);
+                    div.addEventListener("click", function(){ 
+                        $http({
+                            url: 'http://localhost:90/php/display.php',
+                            method: 'POST',
+                            headers:{
+                                'Content-Type':'application/x-www-form-urlencoded'
+                            },
+                            data: 'courseid='+response.data.session[i].id
+                        }).then(function(response){
+                            if(response.data.status == 'success'){
+                                alert(response.data.num+" people signed up");
+                            }else{
+                                alert('error');
+                            }
+                        });
+                    });
+                }
             }else{
-                // alert(response.data.message);
+                alert(response.data.message);
             }
         })
     };

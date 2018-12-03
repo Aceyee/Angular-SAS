@@ -16,8 +16,10 @@
         while($row = mysqli_fetch_array($result)){
             array_push($response['session'], array("id"=>$row[0], "university"=>$row[1], "course"=>$row[2], "session"=>$row[3], "professor"=>$row[4]));
         }
-        echo json_encode($response);
     }else{
-        echo "Search Fails. No Result";
+        $response['status']='error';
+        $response['message']='Search Fails. No Result';
     }
+    echo json_encode($response);
+
 ?>
