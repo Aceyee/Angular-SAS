@@ -7,6 +7,9 @@ app.config(function($routeProvider){
     }).when('/login', {
         templateUrl: './components/login.html',
         controller: 'loginCtrl'
+    }).when('/register', {
+        templateUrl: './components/register.html',
+        controller: 'registerCtrl'
     }).when('/dashboard', {
         resolve:{
             check: function($location, user){
@@ -57,6 +60,36 @@ app.controller('loginCtrl', function($scope, $http, $location, user){
             }else{
                 alert('invalid login');
             }
+        })
+    }
+});
+
+app.controller('registerCtrl', function($scope, $http, $location, user){
+    $scope.register = function(){
+        var username = $scope.username;
+        var password = $scope.password;
+        var university = $scope.university;
+        var roll = $scope.roll;
+        // console.log(roll);
+        var email = $scope.email;
+
+        $http({
+            url: 'http://localhost:90/register.php',
+            method: 'POST',
+            headers:{
+                'Content-Type':'application/x-www-form-urlencoded'
+            },
+            data: 'user_name='+username+'&user_pass='+password+'&user_university='+university
+                    +'&user_roll='+roll +'&user_email='+email
+        }).then(function(response){
+            console.log(response.data);
+            // if(response.data.status == 'loggedin'){
+            //     user.userLoggedIn();
+            //     user.setName(response.data.user);
+            //     $location.path('/dashboard');
+            // }else{
+            //     alert('invalid login');
+            // }
         })
     }
 });
